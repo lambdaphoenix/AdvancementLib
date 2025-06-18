@@ -1,7 +1,6 @@
 package io.github._6mal7.advancementLib;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -12,9 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 /**
  * Functional interface for extracting a {@link Player} from a Bukkit {@link Event}.
  *
- * <p>Used by {@link AdvancementAPI#registerAdvancement} to determine which player is associated
- * with a given event.
- *
+ * <p>Used by {@link AdvancementAPI} and {@link AdvancementRegisterBuilder} to determine which player is associated
+ * with a given event instance.
  * <p><b>Supported Events in {@code getDefaultPlayerExtractor}:</b>
  *
  * <ul>
@@ -24,16 +22,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
  *   <li>{@link PlayerJumpEvent}
  * </ul>
  *
- * For other event types, you may provide your own extractor or extend this method.
+ * For other event types, you may provide your own extractor or extend this method. The returned extractor will return {@code null} if the event type is unsupported.
  *
  * @param <E> the event type
- * @see AdvancementAPI#registerAdvancement(String, Class, BiPredicate, int)
- * @see AdvancementAPI#registerAdvancement(String, Class, BiPredicate, int, Function)
- * @see PlayerExtractor#getDefaultPlayerExtractor(Class)
  * @author 6mal7
- * @version 0.1.1
+ * @version 0.2.0
  * @since 0.1.0
  * @see AdvancementAPI
+ * @see AdvancementRegisterBuilder
  */
 @FunctionalInterface
 public interface PlayerExtractor<E extends Event> extends Function<E, Player> {
