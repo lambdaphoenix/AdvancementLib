@@ -16,7 +16,7 @@ import org.bukkit.event.Event;
  * <h3>Required parameters:</h3>
  *
  * <ul>
- *   <li>{@code advancementName} (unique string identifier)
+ *   <li>{@code advancementKey} (unique string identifier)
  *   <li>{@code eventType} (class of the Bukkit event)
  * </ul>
  *
@@ -46,7 +46,7 @@ import org.bukkit.event.Event;
  */
 public class AdvancementRegisterBuilder<E extends Event> {
   private final AdvancementAPI api;
-  private String advancementName;
+  private String advancementKey;
   private Class<E> eventType;
   private BiPredicate<Player, E> condition;
   private int targetValue = 1;
@@ -70,42 +70,42 @@ public class AdvancementRegisterBuilder<E extends Event> {
    * Create a new builder with a specified advancement name.
    *
    * @param api the AdvancementAPI instance; must not be {@code null}
-   * @param advancementName the unique name for this advancement; must not be {@code null}
+   * @param advancementKey the unique name for this advancement; must not be {@code null}
    * @since 0.2.0
    * @see AdvancementAPI
    */
-  public AdvancementRegisterBuilder(AdvancementAPI api, String advancementName) {
+  public AdvancementRegisterBuilder(AdvancementAPI api, String advancementKey) {
     this(api);
-    this.advancementName(advancementName);
+    this.advancementKey(advancementKey);
   }
 
   /**
    * Create a new builder with a specified advancement name and event type.
    *
    * @param api the AdvancementAPI instance; must not be {@code null}
-   * @param advancementName the unique name for this advancement; must not be {@code null}
+   * @param advancementKey the unique name for this advancement; must not be {@code null}
    * @param eventType the event type that triggers this advancement; must not be {@code null}
    * @since 0.2.0
    * @see AdvancementAPI
    * @see Event
    */
   public AdvancementRegisterBuilder(
-      AdvancementAPI api, String advancementName, Class<E> eventType) {
+      AdvancementAPI api, String advancementKey, Class<E> eventType) {
     this(api);
-    this.advancementName(advancementName);
+    this.advancementKey(advancementKey);
     this.eventType(eventType);
   }
 
   /**
    * Sets the unique name for this advancement.
    *
-   * @param advancementName the advancement name; must not be {@code null}
+   * @param advancementKey the advancement name; must not be {@code null}
    * @return this builder for chaining
-   * @throws NullPointerException if {@code advancementName} is {@code null}
+   * @throws NullPointerException if {@code advancementKey} is {@code null}
    * @since 0.2.0
    */
-  public AdvancementRegisterBuilder<E> advancementName(String advancementName) {
-    this.advancementName = Objects.requireNonNull(advancementName);
+  public AdvancementRegisterBuilder<E> advancementKey(String advancementKey) {
+    this.advancementKey = Objects.requireNonNull(advancementKey);
     return this;
   }
 
@@ -204,7 +204,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
   /**
    * Registers the advancement with the configured parameters.
    *
-   * <p><b>Required:</b> {@code advancementName} and {@code eventType} must be set before calling
+   * <p><b>Required:</b> {@code advancementKey} and {@code eventType} must be set before calling
    * this method. <br>
    * If {@code condition} is not set, defaults to always {@code true}. <br>
    * If {@code playerExtractor} is not set, a default extractor will be used if available (see
@@ -217,7 +217,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
    *     ToIntFunction)
    */
   public void register() {
-    if (this.advancementName == null)
+    if (this.advancementKey == null)
       throw new IllegalArgumentException("Advancement name must be set");
     if (this.eventType == null) throw new IllegalArgumentException("Event type must be set");
     if (this.targetValue < 1) throw new IllegalArgumentException("Target value must be at least 1");
@@ -230,7 +230,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
     }
 
     this.api.registerAdvancement(
-        this.advancementName,
+        this.advancementKey,
         this.eventType,
         this.condition,
         this.targetValue,
