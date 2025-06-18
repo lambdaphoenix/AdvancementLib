@@ -13,7 +13,7 @@ import org.bukkit.event.Event;
  * <p>Allows you to specify all the details for your advancement, including the event, conditions,
  * progress targets, and how criteria are granted.
  *
- * <h3>Required parameters:</h3>
+ * <h2>Required parameters:</h2>
  *
  * <ul>
  *   <li>{@code advancementKey} (unique string identifier)
@@ -22,7 +22,7 @@ import org.bukkit.event.Event;
  *
  * These must be set before calling {@link #build()}.
  *
- * <h3>Optional parameters:</h3>
+ * <h2>Optional parameters:</h2>
  *
  * <ul>
  *   <li>{@code condition} - predicate for event acceptance (defaults to always true)

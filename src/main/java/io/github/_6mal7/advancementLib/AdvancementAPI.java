@@ -21,7 +21,7 @@ import org.bukkit.plugin.Plugin;
  * <p>Use this API to define custom triggers and conditions for granting advancements to players.
  * All registration must go through the builder pattern.
  *
- * <h3>Example usage:</h3>
+ * <h2>Example usage:</h2>
  *
  * <pre>{@code
  * AdvancementAPI api = new AdvancementAPI(plugin);
