@@ -1,15 +1,14 @@
 # AdvancementLib
 
-A Java library for Paper plugins to easily register and manage custom or vanilla advancements in Minecraft.  
-**AdvancementLib** lets you programmatically grant advancements to players based on any Bukkit event and custom condition.
-
+**AdvancementLib** is a modern, fluent Java library for creating custom advancements in [PaperMC](https://papermc.io/) Minecraft plugins.  
+It lets you easily register and manage advancements that respond to any Bukkit event, using a powerful builder-based API.
 ---
 
 ## ✨ Features
 - **Register custom triggers:** Listen for any Bukkit event (e.g., block break, entity death, player action) as an advancement trigger.
 - **Custom conditions:** Define your own logic to decide when an advancement should progress or be granted—perfect for unique gameplay challenges.
 - **Support for vanilla & custom advancements:** Grant both built-in Minecraft advancements and your own custom ones.
-- **Progress tracking:** Easily set multi-step advancements (e.g., "break 100 blocks") with automatic progress tracking per player.
+- **Progress tracking:** Easily set multistep advancements (e.g., "break 100 blocks") with automatic progress tracking per player.
 - **Builder API:** Use a fluent builder to configure triggers, conditions, and progress logic.
 - **Custom progress increments:** Determine how much progress each event grants (default is 1, but can be customized).
 
@@ -17,68 +16,46 @@ A Java library for Paper plugins to easily register and manage custom or vanilla
 
 ## 🚀 Getting Started
 
-### 1. Add the Library
+### 1. Add as a Dependency
 
 Add **AdvancementLib** as a dependency in your project using your preferred build tool or project setup method.
 
-### 2. Initialize the API
+>Note: Add the PaperMC repository if not already present.
 
-Before using the API, you need to create an instance of the `AdvancementAPI` object.  
-This object is the entry point for registering and managing advancements in your plugin.
+### 2. Basic Usage
 
-#### Creating the API Object
+#### Register an Advancement
 
 ```java
-  AdvancementAPI advancementAPI = new AdvancementAPI(plugin); // 'plugin' is your JavaPlugin instance
+import io.github._6mal7.advancementLib.AdvancementAPI;
+
+AdvancementAPI api = new AdvancementAPI(plugin);
+
+api.register(BlockBreakEvent.class)
+    .advancementKey("myplugin:break_10_stone")
+    .condition((player, event) -> event.getBlock().getType() == Material.STONE)
+    .targetValue(10)
+    .grantMode(GrantMode.ALL_AT_ONCE)
+    .build();
 ```
 
-### 3. Register an Advancement
-Here's how to grant the vanilla **"What a Deal!"** advancement (`minecraft:adventure/trade`) when a player kills a villager:
+#### Grant Modes
 
-#### Using the Builder API (Recommended)
+- `ALL_AT_ONCE`: Grants the advancement when the target is reached.
+- `STEP_BY_STEP`: Grants one criterion at a time (shows progress bar in-game).
+
+#### Custom Player Extractor
+
 ```java
-  api.newRegisterBuilder(EntityDeathEvent.class)
-    .advancementName("minecraft:adventure/trade")
-    .condition((player, event) -> event.getEntity() instanceof Villager && player != null)
-    .playerExtractor(event -> event.getEntity().getKiller())
-    .register();
+api.register(CustomEvent.class)
+    .advancementKey("myplugin:custom_event")
+    .playerExtractor(event -> event.getWhoDidIt())
+    .build();
 ```
 
-#### Using the Direct API
-```java
-  api.registerAdvancement(
-    "minecraft:adventure/trade",
-    EntityDeathEvent.class,
-    (player, event) -> event.getEntity() instanceof Villager && player != null,
-    1,
-    event -> event.getEntity().getKiller(),
-    GrantMode.ALL_AT_ONCE,
-    null
-  );
-```
+## 📚 API Highlights
 
-## 📚 API Reference
-
-### Builder API Attributes
-```java
-advancementKey(String advancementKey)          // The namespaced key of the advancement (e.g. "minecraft:adventure/trade")
-eventType(Class<E> eventType)                  // The Bukkit event class to listen for
-condition(BiPredicate<Player, E> condition)    // Predicate to check if the event should count for progress
-targetValue(int targetValue)                   // Number of times the condition must be met before granting the advancement
-playerExtractor(Function<E, Player> extractor) // Function to extract the Player from the event
-grantMode(GrantMode grantMode)                 // How the advancement is granted: ALL_AT_ONCE or STEP_BY_STEP
-increment(ToIntFunction<E> increment)          // (Optional) Function to determine progress per event. Defaults to 1 if null
-```
-
-### Direct API Parameters
-```java
-  <E extends Event> void registerAdvancement(
-    String advancementKey,                     // e.g. "myplugin:my_advancement"
-    Class<E> eventType,                        // Bukkit event class to listen for
-    BiPredicate<Player, E> condition,          // Condition to check before progressing
-    int targetValue,                           // Number of times condition must be met
-    Function<E, Player> playerExtractor,       // How to get the Player from the event
-    GrantMode grantMode,                       //How the advancement is granted: ALL_AT_ONCE or STEP_BY_STEP
-    ToIntFunction<E> increment                 // Function to determine progress per event. Defaults to 1 if null
-  )
-```
+- **AdvancementAPI** – Main entry point for registering advancements.
+- **AdvancementRegisterBuilder** – Fluent builder for all advancement options.
+- **GrantMode** – Enum for grant behavior: all at once or step-by-step.
+- **PlayerExtractor** – Interface for mapping any event to a Player.

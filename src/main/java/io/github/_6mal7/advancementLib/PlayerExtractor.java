@@ -11,22 +11,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 /**
  * Functional interface for extracting a {@link Player} from a Bukkit {@link Event}.
  *
- * <p>Used by {@link AdvancementAPI} and {@link AdvancementRegisterBuilder} to determine which player is associated
- * with a given event instance.
- * <p><b>Supported Events in {@code getDefaultPlayerExtractor}:</b>
- *
- * <ul>
- *   <li>{@link BlockBreakEvent}
- *   <li>{@link BlockPlaceEvent}
- *   <li>{@link PlayerInteractEvent}
- *   <li>{@link PlayerJumpEvent}
- * </ul>
- *
- * For other event types, you may provide your own extractor or extend this method. The returned extractor will return {@code null} if the event type is unsupported.
+ * <p>Used by {@link AdvancementAPI} and {@link AdvancementRegisterBuilder} to determine which
+ * player is associated with a given event instance. For default supported event types see {@link
+ * #getDefaultPlayerExtractor(Class)}.
  *
  * @param <E> the event type
  * @author 6mal7
- * @version 0.2.0
+ * @version 0.2.1
  * @since 0.1.0
  * @see AdvancementAPI
  * @see AdvancementRegisterBuilder
@@ -35,9 +26,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public interface PlayerExtractor<E extends Event> extends Function<E, Player> {
 
   /**
-   * Returns a default {@link PlayerExtractor} for common Bukkit events.
+   * Provides a default {@link PlayerExtractor} for common Bukkit events.
    *
-   * <p>Currently supported:
+   * <p>Supported events:
    *
    * <ul>
    *   <li>{@link BlockBreakEvent}
@@ -46,8 +37,7 @@ public interface PlayerExtractor<E extends Event> extends Function<E, Player> {
    *   <li>{@link PlayerJumpEvent}
    * </ul>
    *
-   * For other event types, this method returns an extractor that always returns {@code null}. You
-   * may implement your own extractor for custom events.
+   * For other event types, this method returns an extractor that always returns {@code null}.
    *
    * @param eventType the event class
    * @param <E> the event type

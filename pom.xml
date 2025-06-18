@@ -6,14 +6,25 @@
 
     <groupId>io.github._6mal7</groupId>
     <artifactId>AdvancementLib</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <packaging>jar</packaging>
 
     <name>AdvancementLib</name>
+    <description>A fluent Java library for custom advancements in PaperMC plugins.</description>
+    <url>https://github.com/6mal7/AdvancementLib</url>
+
+    <developers>
+        <developer>
+            <id>6mal7</id>
+            <name>6mal7</name>
+            <url>https://github.com/6mal7</url>
+        </developer>
+    </developers>
 
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <paper.api.version>1.21.4-R0.1-SNAPSHOT</paper.api.version>
     </properties>
 
     <repositories>
@@ -21,17 +32,13 @@
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>${paper.api.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -7,7 +7,7 @@ package io.github._6mal7.advancementLib;
  * target value is reached, or to grant criteria one by one as the player progresses.
  *
  * @author 6mal7
- * @version 0.2.0
+ * @version 0.2.1
  * @since 0.2.0
  */
 public enum GrantMode {
@@ -15,8 +15,7 @@ public enum GrantMode {
    * All remaining criteria for the advancement are granted at once when the progress reaches or
    * exceeds the target value.
    *
-   * <p>Use this mode for advancements that should be completed in a single step after reaching the
-   * required progress.
+   * <p>Use this mode for advancements that should be completed in a single step.
    */
   ALL_AT_ONCE,
   /**

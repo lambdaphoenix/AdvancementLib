@@ -16,37 +16,25 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
 /**
- * API for registering and managing custom or vanilla advancements in a Paper plugin. Allows you to
- * define custom triggers and conditions for granting advancements.
+ * API for registering and tracking custom or vanilla advancements in your plugin.
  *
- * <h3>Recommended usage (with builder):</h3>
+ * <p>Use this API to define custom triggers and conditions for granting advancements to players.
+ * All registration must go through the builder pattern.
+ *
+ * <h3>Example usage:</h3>
  *
  * <pre>{@code
  * AdvancementAPI api = new AdvancementAPI(plugin);
- * api.newRegisterBuilder(PlayerInteractEvent.class)
- *    .advancementName("minecraft:adventure/trade")
- *    .condition((player, event) -> event.getAction() == Action.RIGHT_CLICK_BLOCK)
- *    .targetValue(5)
- *    .playerExtractor(event -> event.getPlayer())
- *    .register();
- * }</pre>
- *
- * <h3>Direct usage (not recommended):</h3>
- *
- * <pre>{@code
- * api.registerAdvancement(
- *     "minecraft:adventure/trade",
- *     PlayerInteractEvent.class,
- *     (player, event) -> event.getAction() == Action.RIGHT_CLICK_BLOCK,
- *     5,
- *     event -> event.getPlayer(),
- *     GrantMode.ALL_AT_ONCE,
- *     null
- * );
+ * api.register(PlayerInteractEvent.class)
+ *  .advancementKey("minecraft:adventure/trade")
+ *  .condition((player, event) -> event.getAction() == Action.RIGHT_CLICK_BLOCK)
+ *  .targetValue(5)
+ *  .playerExtractor(event -> event.getPlayer())
+ *  .build();
  * }</pre>
  *
  * @author 6mal7
- * @version 0.2.0
+ * @version 0.2.1
  * @since 0.1.0
  * @see AdvancementRegisterBuilder
  * @see PlayerExtractor
@@ -57,21 +45,21 @@ public final class AdvancementAPI {
   private final Plugin plugin;
 
   /**
-   * Constructs a new AdvancementAPI for the given plugin.
+   * Creates a new AdvancementAPI instance for your plugin.
    *
-   * @param plugin your plugin instance (not null)
-   * @throws NullPointerException if plugin is null
+   * @param plugin your plugin instance (not {@code null})
+   * @throws NullPointerException if plugin is {@code null}
    * @since 0.1.0
    * @see Plugin
    */
   public AdvancementAPI(Plugin plugin) {
-    this.plugin = Objects.requireNonNull(plugin);
+    this.plugin = Objects.requireNonNull(plugin, "Plugin cannot be null");
   }
 
   /**
    * Starts a new {@link AdvancementRegisterBuilder} for the given event type.
    *
-   * <p>This is the recommended way to register advancements.
+   * <p>This is the only supported way to register advancements.
    *
    * @param eventType the Bukkit event class to listen for
    * @param <E> the event type
@@ -79,24 +67,17 @@ public final class AdvancementAPI {
    * @since 0.2.0
    * @see AdvancementRegisterBuilder
    */
-  public <E extends Event> AdvancementRegisterBuilder<E> newRegisterBuilder(Class<E> eventType) {
+  public <E extends Event> AdvancementRegisterBuilder<E> register(Class<E> eventType) {
     return new AdvancementRegisterBuilder<E>(this).eventType(eventType);
   }
 
   /**
-   * Registers an advancement trigger for the given event type and player extractor.
+   * Registers an advancement trigger for the given event type.
    *
-   * <p>Most users should use {@link #newRegisterBuilder(Class)} and {@link
-   * AdvancementRegisterBuilder} instead. <br>
-   * The <b>condition</b> parameter is a predicate that determines if the advancement should
-   * progress. It receives the Player and the event instance as arguments. <br>
-   * The <b>playerExtractor</b> parameter is a function to extract the Player from the event. For a
-   * list of events with built-in support for player extraction, see {@link
-   * PlayerExtractor#getDefaultPlayerExtractor(Class)}. <br>
-   * The <b>increment</b> parameter determines how much progress is made per event. If {@code null},
-   * progress increments by 1 per event.
+   * <p>This method is package-private and should only be called by {@link
+   * AdvancementRegisterBuilder}.
    *
-   * @param advancementKey the namespaced key of the advancement (e.g. "minecraft:adventure/trade")
+   * @param advancementKey the unique advancement key (e.g. "minecraft:adventure/trade")
    * @param eventType the Bukkit event class to listen for
    * @param condition a predicate that determines if the advancement should progress
    * @param targetValue the number of times the condition must be met before granting the
@@ -112,7 +93,7 @@ public final class AdvancementAPI {
    * @see PlayerExtractor
    * @see AdvancementRegisterBuilder
    */
-  public <E extends Event> void registerAdvancement(
+  <E extends Event> void registerAdvancement(
       String advancementKey,
       Class<E> eventType,
       BiPredicate<Player, E> condition,
@@ -125,8 +106,10 @@ public final class AdvancementAPI {
         || condition == null
         || targetValue < 1
         || playerExtractor == null
-        || grantMode == null) throw new IllegalArgumentException();
-    if (getAdvancement(advancementKey) == null) throw new IllegalArgumentException();
+        || grantMode == null)
+      throw new IllegalArgumentException("Invalid arguments for registering advancement.");
+    if (getAdvancement(advancementKey) == null)
+      throw new IllegalArgumentException("Advancement not found: " + advancementKey);
     Bukkit.getPluginManager()
         .registerEvent(
             eventType,
@@ -186,7 +169,7 @@ public final class AdvancementAPI {
   }
 
   /**
-   * Gets the Bukkit Advancement object for the given key.
+   * Looks up a Bukkit Advancement by key.
    *
    * @param advancementKey the string key (e.g. "minecraft:adventure/trade")
    * @return the Advancement, or null if not found or key is invalid
@@ -207,7 +190,7 @@ public final class AdvancementAPI {
   }
 
   /**
-   * Grants the specified advancement to the player by awarding all remaining criteria.
+   * Grants all remaining criteria for the specified advancement to the player.
    *
    * @param player the player to grant the advancement to
    * @param advancementKey the namespaced key of the advancement

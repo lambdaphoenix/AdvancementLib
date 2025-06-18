@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 /**
- * Builder for registering custom advancements in your plugin.
+ * Fluent Builder for registering custom advancements in your plugin.
  *
- * <p>This builder allows you to fluently configure and register advancements that are triggered by
- * Bukkit events.
+ * <p>Allows you to specify all the details for your advancement, including the event, conditions,
+ * progress targets, and how criteria are granted.
  *
  * <h3>Required parameters:</h3>
  *
@@ -20,7 +20,7 @@ import org.bukkit.event.Event;
  *   <li>{@code eventType} (class of the Bukkit event)
  * </ul>
  *
- * These must be set before calling {@link #register()}.
+ * These must be set before calling {@link #build()}.
  *
  * <h3>Optional parameters:</h3>
  *
@@ -37,8 +37,9 @@ import org.bukkit.event.Event;
  * <p><b>Note:</b> The {@link PlayerExtractor} utility provides default extractors for common Bukkit
  * events. For custom events, you may supply your own extractor.
  *
+ * @param <E> the event type
  * @author 6mal7
- * @version 0.2.0
+ * @version 0.2.1
  * @since 0.2.0
  * @see AdvancementAPI
  * @see PlayerExtractor
@@ -55,7 +56,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
   private ToIntFunction<E> increment;
 
   /**
-   * Create a new builder for registering advancements.
+   * Start building a new advancement.
    *
    * @param api the AdvancementAPI instance; must not be {@code null}
    * @throws NullPointerException if {@code api} is {@code null}
@@ -63,11 +64,11 @@ public class AdvancementRegisterBuilder<E extends Event> {
    * @see AdvancementAPI
    */
   public AdvancementRegisterBuilder(AdvancementAPI api) {
-    this.api = Objects.requireNonNull(api);
+    this.api = Objects.requireNonNull(api, "AdvancementAPI cannot be null");
   }
 
   /**
-   * Create a new builder with a specified advancement name.
+   * Start building a new advancement with a specific key.
    *
    * @param api the AdvancementAPI instance; must not be {@code null}
    * @param advancementKey the unique name for this advancement; must not be {@code null}
@@ -80,27 +81,25 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Create a new builder with a specified advancement name and event type.
+   * Start building a new advancement with a specific key and event type.
    *
    * @param api the AdvancementAPI instance; must not be {@code null}
    * @param advancementKey the unique name for this advancement; must not be {@code null}
    * @param eventType the event type that triggers this advancement; must not be {@code null}
    * @since 0.2.0
    * @see AdvancementAPI
-   * @see Event
    */
-  public AdvancementRegisterBuilder(
-      AdvancementAPI api, String advancementKey, Class<E> eventType) {
+  public AdvancementRegisterBuilder(AdvancementAPI api, String advancementKey, Class<E> eventType) {
     this(api);
     this.advancementKey(advancementKey);
     this.eventType(eventType);
   }
 
   /**
-   * Sets the unique name for this advancement.
+   * Sets the unique identifier for this advancement.
    *
    * @param advancementKey the advancement name; must not be {@code null}
-   * @return this builder for chaining
+   * @return this builder
    * @throws NullPointerException if {@code advancementKey} is {@code null}
    * @since 0.2.0
    */
@@ -113,7 +112,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
    * Sets the event type that triggers this advancement.
    *
    * @param eventType the event class; must not be {@code null}
-   * @return this builder for chaining
+   * @return this builder
    * @throws NullPointerException if {@code eventType} is {@code null}
    * @since 0.2.0
    * @see Event
@@ -124,12 +123,12 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Sets the condition that must be met for the advancement to progress.
+   * Sets the condition that must be true for the advancement to progress.
    *
    * <p>If not set, defaults to always {@code true}.
    *
-   * @param condition a predicate taking the player and event; may be {@code null}
-   * @return this builder for chaining
+   * @param condition a predicate {@code (player, event) -> true} if this event should count
+   * @return this builder
    * @since 0.2.0
    * @see BiPredicate
    */
@@ -139,12 +138,12 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Sets the target value required to complete the advancement.
+   * Sets how many times the event must occur before the advancement is granted.
    *
    * <p>Must be at least 1. Default is 1.
    *
-   * @param targetValue the required progress value
-   * @return this builder for chaining
+   * @param targetValue the number of times the event must occur
+   * @return this builder
    * @since 0.2.0
    */
   public AdvancementRegisterBuilder<E> targetValue(int targetValue) {
@@ -153,13 +152,13 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Sets the function to extract the player from the event.
+   * Sets a custom function to extract the player from the event.
    *
    * <p>If not set, a default extractor will be used if available for the event type (see {@link
    * PlayerExtractor#getDefaultPlayerExtractor(Class)}).
    *
-   * @param playerExtractor function to extract the player from the event; may be {@code null}
-   * @return this builder for chaining
+   * @param playerExtractor function to extract the player from the event
+   * @return this builder
    * @since 0.2.0
    * @see PlayerExtractor
    * @see Function
@@ -170,12 +169,12 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Sets the grant mode for this advancement.
+   * Sets how criteria are granted to the player
    *
    * <p>Defaults to {@link GrantMode#ALL_AT_ONCE}.
    *
    * @param grantMode the grant mode; must not be {@code null}
-   * @return this builder for chaining
+   * @return this builder
    * @throws NullPointerException if {@code grantMode} is {@code null}
    * @since 0.2.0
    * @see GrantMode
@@ -186,13 +185,12 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Sets the function that determines how much progress is made per event.
+   * Sets how much progress each event should add.
    *
-   * <p>This is optional and may be {@code null}. If {@code null}, the progress increment defaults
-   * to 1 per event. Otherwise, the provided function determines the increment based on the event.
+   * <p>If not set, each event increases progress by 1.
    *
-   * @param increment function to compute progress increment from the event; may be {@code null}
-   * @return this builder for chaining
+   * @param increment function to determine progress increment
+   * @return this builder
    * @since 0.2.0
    * @see ToIntFunction
    */
@@ -202,21 +200,16 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
-   * Registers the advancement with the configured parameters.
+   * Registers the advancement with the specified configuration.
    *
-   * <p><b>Required:</b> {@code advancementKey} and {@code eventType} must be set before calling
-   * this method. <br>
-   * If {@code condition} is not set, defaults to always {@code true}. <br>
-   * If {@code playerExtractor} is not set, a default extractor will be used if available (see
-   * {@link PlayerExtractor#getDefaultPlayerExtractor(Class)}). <br>
-   * If {@code increment} is not set, the progress increment defaults to 1 per event.
+   * <p>You must set both {@code advancementKey} and {@code eventType} before calling this.
    *
    * @throws IllegalArgumentException if required fields are missing or invalid
    * @since 0.2.0
    * @see AdvancementAPI#registerAdvancement(String, Class, BiPredicate, int, Function, GrantMode,
    *     ToIntFunction)
    */
-  public void register() {
+  public void build() {
     if (this.advancementKey == null)
       throw new IllegalArgumentException("Advancement name must be set");
     if (this.eventType == null) throw new IllegalArgumentException("Event type must be set");
