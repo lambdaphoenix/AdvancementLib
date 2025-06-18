@@ -1,6 +1,10 @@
 # AdvancementLib
+[![Javadoc](https://img.shields.io/badge/docs-javadoc-blue.svg)](https://6mal7.github.io/AdvancementLib/javadoc/)
+[![License](https://img.shields.io/github/license/6mal7/AdvancementLib)](https://github.com/6mal7/AdvancementLib/blob/main/LICENSE)
+[![Java Version](https://img.shields.io/badge/Java-21-blue.svg)](https://jdk.java.net/)
+[![PaperMC](https://img.shields.io/badge/PaperMC-1.21.4-green)](https://papermc.io/)
 
-**AdvancementLib** is a modern, fluent Java library for creating custom advancements in [PaperMC](https://papermc.io/) Minecraft plugins.  
+>**AdvancementLib** is a modern, fluent Java library for creating custom advancements in [PaperMC](https://papermc.io/) Minecraft plugins.  
 It lets you easily register and manage advancements that respond to any Bukkit event, using a powerful builder-based API.
 ---
 
@@ -53,9 +57,13 @@ api.register(CustomEvent.class)
     .build();
 ```
 
-## 📚 API Highlights
+## 📚 API Highlights & Documentation
 
 - **AdvancementAPI** – Main entry point for registering advancements.
 - **AdvancementRegisterBuilder** – Fluent builder for all advancement options.
 - **GrantMode** – Enum for grant behavior: all at once or step-by-step.
 - **PlayerExtractor** – Interface for mapping any event to a Player.
+
+The latest Javadoc is automatically published to GitHub Pages:
+
+➡️ **[View the Javadoc here](https://6mal7.github.io/AdvancementLib/javadoc/)**
