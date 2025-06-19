@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
+import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -27,7 +28,7 @@ import org.bukkit.event.Event;
  * <ul>
  *   <li>{@code condition} - predicate for event acceptance (defaults to always true)
  *   <li>{@code playerExtractor} - function to extract the player from the event (defaults to {@link
- *       PlayerExtractor#getDefaultPlayerExtractor(Class)} if available)
+ *       PlayerExtractor#getDefaultPlayerExtractor(Class, Logger)} if available)
  *   <li>{@code increment} - function to determine progress increment (if {@code null}, defaults to
  *       1 per event; otherwise, uses the provided function)
  *   <li>{@code targetValue} - required progress to complete (default: 1, must be at least 1)
@@ -155,7 +156,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
    * Sets a custom function to extract the player from the event.
    *
    * <p>If not set, a default extractor will be used if available for the event type (see {@link
-   * PlayerExtractor#getDefaultPlayerExtractor(Class)}).
+   * PlayerExtractor#getDefaultPlayerExtractor(Class, Logger)}).
    *
    * @param playerExtractor function to extract the player from the event
    * @return this builder
@@ -219,7 +220,8 @@ public class AdvancementRegisterBuilder<E extends Event> {
       this.condition = (player, event) -> true;
     }
     if (this.playerExtractor == null) {
-      this.playerExtractor = PlayerExtractor.getDefaultPlayerExtractor(this.eventType);
+      this.playerExtractor =
+          PlayerExtractor.getDefaultPlayerExtractor(this.eventType, api.getLogger());
     }
 
     this.api.registerAdvancement(

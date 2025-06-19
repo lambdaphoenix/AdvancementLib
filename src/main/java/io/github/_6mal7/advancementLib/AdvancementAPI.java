@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
+import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
@@ -150,6 +151,21 @@ public final class AdvancementAPI {
                   .set(namespacedKey, PersistentDataType.INTEGER, value);
             },
             plugin);
+  }
+
+  /**
+   * Returns the logger associated with the plugin using this API.
+   * <p>
+   * All log messages produced by this API or its components should use this logger,
+   * ensuring they are properly prefixed and integrated with the implementing plugin's
+   * logging system.
+   * </p>
+   *
+   * @return the {@link java.util.logging.Logger} instance of the implementing plugin
+   * @since 0.2.1
+   */
+  Logger getLogger() {
+    return this.plugin.getLogger();
   }
 
   /**
