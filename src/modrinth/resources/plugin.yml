@@ -1,0 +1,8 @@
+name: ${project.name}
+main: io.github._6mal7.advancementLib.DummyMain
+version: ${project.version}
+description: ${project.description}
+website: ${project.url}
+authors:
+  - 6mal7
+api-version: 1.20

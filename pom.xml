@@ -24,7 +24,7 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.api.version>1.21.4-R0.1-SNAPSHOT</paper.api.version>
+        <paper.api.version>1.20.6-R0.1-SNAPSHOT</paper.api.version>
     </properties>
 
     <repositories>
@@ -76,4 +76,22 @@
             </resource>
         </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>modrinth</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                    <resource>
+                        <directory>src/modrinth/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 </project>
