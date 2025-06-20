@@ -1,0 +1,47 @@
+name: Release on version tag push
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  github-release:
+    name: GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java/@v4
+        with:
+          java-version: 21
+          distribution: temurin
+
+      - name: Build with maven
+        run: mvn clean package
+
+      - name: Read CHANGELOG
+        id: changelog
+        run: |
+          TITLE=$(head -n 1 CHANGELOG.md | sed 's/^# *//')
+          BODY=$(awk 'NR>1{if(/^---/)exit; print}' CHANGELOG.md)
+          echo "title: $TITLE"
+          echo "body:"
+          echo "$BODY"
+          echo "title<<EOF" >> $GITHUB_OUTPUT
+          echo "$TITLE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Release on GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ steps.changelog.outputs.title }}
+          body: ${{ steps.changelog.outputs.body }}
+          files: target/*.jar
