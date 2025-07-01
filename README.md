@@ -1,6 +1,6 @@
 # AdvancementLib
-[![Javadoc](https://img.shields.io/badge/docs-javadoc-blue.svg)](https://6mal7.github.io/AdvancementLib/javadoc/)
-[![License](https://img.shields.io/github/license/6mal7/AdvancementLib)](https://github.com/6mal7/AdvancementLib/blob/main/LICENSE)
+[![Javadoc](https://img.shields.io/badge/docs-javadoc-blue.svg)](https://lambdaphoenix.github.io/AdvancementLib/javadoc/)
+[![License](https://img.shields.io/github/license/lambdaphoenix/AdvancementLib)](https://github.com/lambdaphoenix/AdvancementLib/blob/main/LICENSE)
 [![Java Version](https://img.shields.io/badge/Java-21-blue.svg)](https://jdk.java.net/)
 [![PaperMC](https://img.shields.io/badge/PaperMC-1.21.4-green)](https://papermc.io/)
 
@@ -31,16 +31,32 @@ Add **AdvancementLib** as a dependency in your project using your preferred buil
 #### Register an Advancement
 
 ```java
-import io.github._6mal7.advancementLib.AdvancementAPI;
+import io.github.lambdaphoenix.advancementLib.AdvancementAPI;
 
 AdvancementAPI api = new AdvancementAPI(plugin);
 
-api.register(BlockBreakEvent.class)
-    .advancementKey("myplugin:break_10_stone")
-    .condition((player, event) -> event.getBlock().getType() == Material.STONE)
-    .targetValue(10)
-    .grantMode(GrantMode.ALL_AT_ONCE)
-    .build();
+api.
+
+register(BlockBreakEvent .class)
+    .
+
+advancementKey("myplugin:break_10_stone")
+    .
+
+condition((player, event) ->event.
+
+getBlock().
+
+getType() ==Material.STONE)
+    .
+
+targetValue(10)
+    .
+
+grantMode(GrantMode.ALL_AT_ONCE)
+    .
+
+build();
 ```
 
 #### Grant Modes
@@ -66,4 +82,4 @@ api.register(CustomEvent.class)
 
 The latest Javadoc is automatically published to GitHub Pages:
 
-➡️ **[View the Javadoc here](https://6mal7.github.io/AdvancementLib/javadoc/)**
+➡️ **[View the Javadoc here](https://lambdaphoenix.github.io/AdvancementLib/javadoc/)**

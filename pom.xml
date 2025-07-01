@@ -4,20 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github._6mal7</groupId>
+    <groupId>io.github.lambdaphoenix</groupId>
     <artifactId>AdvancementLib</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
 
     <name>AdvancementLib</name>
     <description>A fluent Java library for custom advancements in PaperMC plugins.</description>
-    <url>https://github.com/6mal7/AdvancementLib</url>
+    <url>https://github.com/lambdaphoenix/AdvancementLib</url>
 
     <developers>
         <developer>
-            <id>6mal7</id>
-            <name>6mal7</name>
-            <url>https://github.com/6mal7</url>
+            <id>lambdaphoenix</id>
+            <name>lambdaphoenix</name>
+            <url>https://github.com/lambdaphoenix</url>
         </developer>
     </developers>
 

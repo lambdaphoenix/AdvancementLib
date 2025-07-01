@@ -1,4 +1,4 @@
-package io.github._6mal7.advancementLib;
+package io.github.lambdaphoenix.advancementLib;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -39,8 +39,8 @@ import org.bukkit.event.Event;
  * events. For custom events, you may supply your own extractor.
  *
  * @param <E> the event type
- * @author 6mal7
- * @version 0.2.1
+ * @author lambdaphoenix
+ * @version 0.3.0
  * @since 0.2.0
  * @see AdvancementAPI
  * @see PlayerExtractor

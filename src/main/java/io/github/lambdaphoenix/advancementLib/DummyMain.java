@@ -1,4 +1,4 @@
-package io.github._6mal7.advancementLib;
+package io.github.lambdaphoenix.advancementLib;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,8 +10,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * If you see this message in your server logs, you have mistakenly installed the library JAR as a plugin.
  * Please remove it and only use AdvancementLib as a dependency in your own plugin project.
  *
- * @author 6mal7
- * @see <a href="https://github.com/6mal7/AdvancementLib">AdvancementLib on GitHub</a>
+ * @author lambdaphoenix
+ * @see <a href="https://github.com/lambdaphoenix/AdvancementLib">AdvancementLib on GitHub</a>
  */
 public class DummyMain extends JavaPlugin {
 

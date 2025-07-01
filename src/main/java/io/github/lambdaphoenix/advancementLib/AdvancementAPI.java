@@ -1,4 +1,4 @@
-package io.github._6mal7.advancementLib;
+package io.github.lambdaphoenix.advancementLib;
 
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -34,8 +34,8 @@ import org.bukkit.plugin.Plugin;
  *  .build();
  * }</pre>
  *
- * @author 6mal7
- * @version 0.2.1
+ * @author lambdaphoenix
+ * @version 0.3.0
  * @since 0.1.0
  * @see AdvancementRegisterBuilder
  * @see PlayerExtractor

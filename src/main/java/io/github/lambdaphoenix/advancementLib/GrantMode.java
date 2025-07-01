@@ -1,4 +1,4 @@
-package io.github._6mal7.advancementLib;
+package io.github.lambdaphoenix.advancementLib;
 
 /**
  * Specifies how criteria for a custom advancement should be granted.
@@ -6,8 +6,8 @@ package io.github._6mal7.advancementLib;
  * <p>Used by {@code AdvancementAPI} to determine whether to grant all criteria at once when the
  * target value is reached, or to grant criteria one by one as the player progresses.
  *
- * @author 6mal7
- * @version 0.2.1
+ * @author lambdaphoenix
+ * @version 0.3.0
  * @since 0.2.0
  */
 public enum GrantMode {

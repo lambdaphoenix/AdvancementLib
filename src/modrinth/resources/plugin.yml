@@ -1,8 +1,8 @@
 name: ${project.name}
-main: io.github._6mal7.advancementLib.DummyMain
+main: io.github.lambdaphoenix.advancementLib.DummyMain
 version: ${project.version}
 description: ${project.description}
 website: ${project.url}
 authors:
-  - 6mal7
+  - lambdaphoenix
 api-version: 1.20

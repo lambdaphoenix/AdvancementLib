@@ -1,4 +1,4 @@
-package io.github._6mal7.advancementLib;
+package io.github.lambdaphoenix.advancementLib;
 
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.util.function.Function;
@@ -17,8 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * #getDefaultPlayerExtractor(Class, Logger)}
  *
  * @param <E> the event type
- * @author 6mal7
- * @version 0.2.1
+ * @author lambdaphoenix
+ * @version 0.3.0
  * @since 0.1.0
  * @see AdvancementAPI
  * @see AdvancementRegisterBuilder
