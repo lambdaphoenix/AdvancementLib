@@ -1,6 +1,6 @@
 # AdvancementLib v0.3.0
 ## ⚠️ Breaking Change: Package Name
-## Changed
+### Changed
 - Package name changed to io.github.lambdaphoenix.advancementLib
 
 ---

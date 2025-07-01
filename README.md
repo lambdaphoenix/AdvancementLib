@@ -35,28 +35,14 @@ import io.github.lambdaphoenix.advancementLib.AdvancementAPI;
 
 AdvancementAPI api = new AdvancementAPI(plugin);
 
-api.
-
-register(BlockBreakEvent .class)
-    .
-
-advancementKey("myplugin:break_10_stone")
-    .
-
-condition((player, event) ->event.
-
-getBlock().
-
-getType() ==Material.STONE)
-    .
-
-targetValue(10)
-    .
-
-grantMode(GrantMode.ALL_AT_ONCE)
-    .
-
-build();
+api.register(BlockBreakEvent.class)
+    .advancementKey("myplugin:break_10_stone")
+    .condition(
+        (player, event) -> event.getBlock().getType() == Material.STONE
+    )
+    .targetValue(10)
+    .grantMode(GrantMode.ALL_AT_ONCE)
+    .build();
 ```
 
 #### Grant Modes
