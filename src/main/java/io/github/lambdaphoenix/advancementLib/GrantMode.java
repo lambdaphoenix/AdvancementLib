@@ -7,7 +7,7 @@ package io.github.lambdaphoenix.advancementLib;
  * target value is reached, or to grant criteria one by one as the player progresses.
  *
  * @author lambdaphoenix
- * @version 0.3.0
+ * @version 0.3.1
  * @since 0.2.0
  */
 public enum GrantMode {

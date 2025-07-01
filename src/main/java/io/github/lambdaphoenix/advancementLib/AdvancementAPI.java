@@ -35,7 +35,7 @@ import org.bukkit.plugin.Plugin;
  * }</pre>
  *
  * @author lambdaphoenix
- * @version 0.3.0
+ * @version 0.3.1
  * @since 0.1.0
  * @see AdvancementRegisterBuilder
  * @see PlayerExtractor
@@ -182,6 +182,41 @@ public final class AdvancementAPI {
     return player
         .getPersistentDataContainer()
         .getOrDefault(namespacedKey, PersistentDataType.INTEGER, 0);
+  }
+
+  /**
+   * Resets the current progress for the specified advancement to the player.
+   *
+   * @param player the player who should have their progress reset
+   * @param advancementKey the namespaced key of the advancement
+   * @since 0.3.1
+   * @see Advancement
+   * @see AdvancementProgress
+   */
+  public void resetProgress(String advancementKey, Player player) {
+    NamespacedKey namespacedKey =
+        new NamespacedKey(ADVANCEMENT_API_KEY, advancementKey.replaceFirst(":", "."));
+    player.getPersistentDataContainer().set(namespacedKey, PersistentDataType.INTEGER, 0);
+  }
+
+  /**
+   * Resets the player's advancement including all criteria.
+   *
+   * @param player the player who should have their advancement reset
+   * @param advancementKey the namespaced key of the advancement
+   * @since 0.3.1
+   * @see Advancement
+   * @see AdvancementProgress
+   */
+  public void resetAdvancement(String advancementKey, Player player) {
+    this.resetProgress(advancementKey, player);
+    Advancement advancement = this.getAdvancement(advancementKey);
+    if (advancement == null) return;
+
+    AdvancementProgress advancementProgress = player.getAdvancementProgress(advancement);
+    for (String criteria : advancementProgress.getAwardedCriteria()) {
+      advancementProgress.revokeCriteria(criteria);
+    }
   }
 
   /**

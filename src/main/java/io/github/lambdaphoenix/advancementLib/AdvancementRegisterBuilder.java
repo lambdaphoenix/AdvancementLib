@@ -40,7 +40,7 @@ import org.bukkit.event.Event;
  *
  * @param <E> the event type
  * @author lambdaphoenix
- * @version 0.3.0
+ * @version 0.3.1
  * @since 0.2.0
  * @see AdvancementAPI
  * @see PlayerExtractor

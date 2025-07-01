@@ -1,3 +1,9 @@
+# AdvancementLib v0.3.1
+## Revoke advancements again!
+### Added
+- Added the possibility to reset the progress or the entire advancement for a player
+
+---
 # AdvancementLib v0.3.0
 ## ⚠️ Breaking Change: Package Name
 ### Changed
