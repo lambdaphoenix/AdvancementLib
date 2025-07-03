@@ -36,7 +36,7 @@ import org.bukkit.plugin.Plugin;
  * }</pre>
  *
  * @author lambdaphoenix
- * @version 0.3.2
+ * @version ${project.version}
  * @since 0.1.0
  * @see AdvancementRegisterBuilder
  * @see PlayerExtractor

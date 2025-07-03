@@ -8,7 +8,7 @@
  * href="https://github.com/lambdaphoenix/AdvancementLib/blob/main/README.md">README</a>.
  *
  * @author lambdaphoenix
- * @version 0.3.2
+ * @version ${project.version}
  * @since 0.1.0
  * @see io.github.lambdaphoenix.advancementLib.AdvancementAPI
  * @see <a href="https://lambdaphoenix.github.io/AdvancementLib/javadoc/">Project Javadoc</a>
