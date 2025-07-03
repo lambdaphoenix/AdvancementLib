@@ -2,7 +2,7 @@
 [![Javadoc](https://img.shields.io/badge/docs-javadoc-blue.svg)](https://lambdaphoenix.github.io/AdvancementLib/javadoc/)
 [![License](https://img.shields.io/github/license/lambdaphoenix/AdvancementLib)](https://github.com/lambdaphoenix/AdvancementLib/blob/main/LICENSE)
 [![Java Version](https://img.shields.io/badge/Java-21-blue.svg)](https://jdk.java.net/)
-[![PaperMC](https://img.shields.io/badge/PaperMC-1.21.4-green)](https://papermc.io/)
+[![PaperMC](https://img.shields.io/badge/PaperMC-1.21-green)](https://papermc.io/)
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/Lerd3Kd9?logo=modrinth&link=https%3A%2F%2Fmodrinth.com%2Fplugin%2Fadvancementlib)
 
 >**AdvancementLib** is a modern, fluent Java library for creating custom advancements in [PaperMC](https://papermc.io/) Minecraft plugins.  

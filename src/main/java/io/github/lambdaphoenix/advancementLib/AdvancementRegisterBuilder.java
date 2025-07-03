@@ -40,7 +40,7 @@ import org.bukkit.event.Event;
  *
  * @param <E> the event type
  * @author lambdaphoenix
- * @version 0.3.1
+ * @version 0.3.2
  * @since 0.2.0
  * @see AdvancementAPI
  * @see PlayerExtractor
@@ -55,6 +55,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
   private Function<E, Player> playerExtractor;
   private GrantMode grantMode = GrantMode.ALL_AT_ONCE;
   private ToIntFunction<E> increment;
+  private boolean requireParent = false;
 
   /**
    * Start building a new advancement.
@@ -201,6 +202,20 @@ public class AdvancementRegisterBuilder<E extends Event> {
   }
 
   /**
+   * Sets if the parent advancement needs to be completed.
+   *
+   * <p>If not set, parent advancement is not needed.
+   *
+   * @param requireParent boolean
+   * @return this builder
+   * @since 0.3.2
+   */
+  public AdvancementRegisterBuilder<E> requireParent(boolean requireParent) {
+    this.requireParent = requireParent;
+    return this;
+  }
+
+  /**
    * Registers the advancement with the specified configuration.
    *
    * <p>You must set both {@code advancementKey} and {@code eventType} before calling this.
@@ -208,7 +223,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
    * @throws IllegalArgumentException if required fields are missing or invalid
    * @since 0.2.0
    * @see AdvancementAPI#registerAdvancement(String, Class, BiPredicate, int, Function, GrantMode,
-   *     ToIntFunction)
+   *     ToIntFunction, boolean)
    */
   public void build() {
     if (this.advancementKey == null)
@@ -231,6 +246,7 @@ public class AdvancementRegisterBuilder<E extends Event> {
         this.targetValue,
         this.playerExtractor,
         this.grantMode,
-        this.increment);
+        this.increment,
+        this.requireParent);
   }
 }

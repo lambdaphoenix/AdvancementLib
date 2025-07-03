@@ -1,9 +1,17 @@
+# AdvancementLib v0.3.2
+## Progress only after parent progression
+### Added
+- Added the possibility to progress an advancement only if the parent advancement has been completed
+
+---
+
 # AdvancementLib v0.3.1
 ## Revoke advancements again!
 ### Added
 - Added the possibility to reset the progress or the entire advancement for a player
 
 ---
+
 # AdvancementLib v0.3.0
 ## ⚠️ Breaking Change: Package Name
 ### Changed

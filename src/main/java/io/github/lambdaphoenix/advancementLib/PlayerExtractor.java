@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  *
  * @param <E> the event type
  * @author lambdaphoenix
- * @version 0.3.1
+ * @version 0.3.2
  * @since 0.1.0
  * @see AdvancementAPI
  * @see AdvancementRegisterBuilder

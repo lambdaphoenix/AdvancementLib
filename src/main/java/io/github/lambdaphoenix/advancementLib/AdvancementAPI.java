@@ -1,5 +1,6 @@
 package io.github.lambdaphoenix.advancementLib;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -35,7 +36,7 @@ import org.bukkit.plugin.Plugin;
  * }</pre>
  *
  * @author lambdaphoenix
- * @version 0.3.1
+ * @version 0.3.2
  * @since 0.1.0
  * @see AdvancementRegisterBuilder
  * @see PlayerExtractor
@@ -86,6 +87,8 @@ public final class AdvancementAPI {
    * @param playerExtractor a function to extract the Player from the event
    * @param grantMode how the advancement is granted (all at once or step by step)
    * @param increment function to compute progress increment from the event; may be {@code null}
+   * @param requireParent boolean, whether the parent advancement needs to be completed before
+   *     progress is made
    * @param <E> the event type
    * @throws IllegalArgumentException if any required parameter is null, targetValue < 1, or
    *     advancement does not exist
@@ -101,7 +104,8 @@ public final class AdvancementAPI {
       int targetValue,
       Function<E, Player> playerExtractor,
       GrantMode grantMode,
-      ToIntFunction<E> increment) {
+      ToIntFunction<E> increment,
+      boolean requireParent) {
 
     if (advancementKey == null
         || condition == null
@@ -111,6 +115,9 @@ public final class AdvancementAPI {
       throw new IllegalArgumentException("Invalid arguments for registering advancement.");
     if (getAdvancement(advancementKey) == null)
       throw new IllegalArgumentException("Advancement not found: " + advancementKey);
+    if (requireParent && Objects.requireNonNull(getAdvancement(advancementKey)).getParent() == null)
+      throw new IllegalArgumentException("Parent of advancement not found: " + advancementKey);
+
     Bukkit.getPluginManager()
         .registerEvent(
             eventType,
@@ -120,7 +127,14 @@ public final class AdvancementAPI {
               if (!eventType.isInstance(event)) return;
               E e = eventType.cast(event);
               Player player = playerExtractor.apply(e);
-              if (player == null || !condition.test(player, e)) return;
+              if (player == null) return;
+              Advancement advancement = getAdvancement(advancementKey);
+              if (advancement == null) return;
+              if (requireParent) {
+                Advancement parent = advancement.getParent();
+                if (parent == null || !player.getAdvancementProgress(parent).isDone()) return;
+              }
+              if (!condition.test(player, e)) return;
               NamespacedKey namespacedKey =
                   new NamespacedKey(ADVANCEMENT_API_KEY, advancementKey.replaceFirst(":", "."));
               int incrementValue = increment != null ? increment.applyAsInt(e) : 1;
@@ -131,17 +145,15 @@ public final class AdvancementAPI {
                           .getOrDefault(namespacedKey, PersistentDataType.INTEGER, 0)
                       + incrementValue;
               if (value == 0) return;
-              switch (grantMode) {
-                case ALL_AT_ONCE -> {
-                  if (value >= targetValue) {
+              if (value >= targetValue) {
+                switch (grantMode) {
+                  case ALL_AT_ONCE -> {
                     value = -1;
-                    grantAdvancement(player, advancementKey);
+                    grantAdvancement(player, advancement);
                   }
-                }
-                case STEP_BY_STEP -> {
-                  if (value >= targetValue) {
+                  case STEP_BY_STEP -> {
                     value -= targetValue;
-                    grantCriterion(player, advancementKey);
+                    grantCriterion(player, advancement);
                   }
                 }
               }
@@ -155,11 +167,9 @@ public final class AdvancementAPI {
 
   /**
    * Returns the logger associated with the plugin using this API.
-   * <p>
-   * All log messages produced by this API or its components should use this logger,
-   * ensuring they are properly prefixed and integrated with the implementing plugin's
-   * logging system.
-   * </p>
+   *
+   * <p>All log messages produced by this API or its components should use this logger, ensuring
+   * they are properly prefixed and integrated with the implementing plugin's logging system.
    *
    * @return the {@link java.util.logging.Logger} instance of the implementing plugin
    * @since 0.2.1
@@ -244,32 +254,28 @@ public final class AdvancementAPI {
    * Grants all remaining criteria for the specified advancement to the player.
    *
    * @param player the player to grant the advancement to
-   * @param advancementKey the namespaced key of the advancement
+   * @param advancement the advancement to progress
    * @since 0.1.0
    * @see Advancement
    * @see AdvancementProgress
    */
-  private void grantAdvancement(Player player, String advancementKey) {
-    Advancement advancement = getAdvancement(advancementKey);
+  private void grantAdvancement(Player player, Advancement advancement) {
     if (advancement == null) return;
 
     AdvancementProgress progress = player.getAdvancementProgress(advancement);
-    for (String criterion : progress.getRemainingCriteria()) {
-      progress.awardCriteria(criterion);
-    }
+    new HashSet<>(progress.getRemainingCriteria()).forEach(progress::awardCriteria);
   }
 
   /**
    * Grants a single criterion for the specified advancement to the player.
    *
    * @param player the player to grant the criterion to
-   * @param advancementKey the namespaced key of the advancement
+   * @param advancement the advancement to progress
    * @since 0.2.0
    * @see Advancement
    * @see AdvancementProgress
    */
-  private void grantCriterion(Player player, String advancementKey) {
-    Advancement advancement = getAdvancement(advancementKey);
+  private void grantCriterion(Player player, Advancement advancement) {
     if (advancement == null) return;
 
     AdvancementProgress progress = player.getAdvancementProgress(advancement);
